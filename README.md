@@ -7,6 +7,25 @@ are executed via API calls to the interpreter. These instructions can be grouped
 >
 > This a conceptual, experimental case study, mostly for shits and giggles. And trolls. Maybe, one day, we will find energy to implement this.
 
+## How to run
+
+### Prerequisites
+
+- Node 13, or nvm
+
+```
+nvm use
+npm i
+npm run start:server              // Starts DML server
+bin/dml -f <your program>         // Runs your program
+```
+
+Example:
+
+```
+bin/dml -f examples/function.dml
+```
+
 ## Syntax
 
 Syntax is defined by HTTP calls - methods and paths, supported by indentation to define nesting. The API paths and methods
@@ -14,17 +33,17 @@ haven't been decided yet and are subject to change.
 
 Declare variable (option 1)
 
-    PUT /dallas/var/{varName}/{value}
+    var/{varName}/{value}
 
 Declare variable (option 2)
 
-    PUT /dallas/var?{varName}={value}
-    PUT /dallas/var?{varName1}={value1}&{varName2}={value2}
+    var?{varName}={value}
+    var?{varName1}={value1}&{varName2}={value2}
 
 Assign result of another instruction to a variable
 
-    PUT /dallas/var/a      // a =
-      GET /dallas/+/3/5    //   3 + 5
+    var/a      // a =
+      +/3/5    //   3 + 5
 
 ... TBD ...
 
@@ -33,35 +52,35 @@ Assign result of another instruction to a variable
 Add two numbers:
 
 ```
-PUT /dallas/var/a/3
-PUT /dallas/var/b/5
-GET /dallas/+/a/b
+var/a/3
+var/b/5
++/a/b
 ```
 
 Fibonacci number:
 
 ```
-PUT /dallas/program/my-fibonacci-example        // Create a program (or a namespace/scope, if you will) called my-fibonacci-example
+program/my-fibonacci-example        // Create a program (or a namespace/scope, if you will) called my-fibonacci-example
 
-  PUT /dallas/defn/fibonacci?params=num           // define function 'fibonacci' with single input parameter 'num'
-    PUT /dallas/var?a=1&b=0&temp                // define a=1, b=0, temp
-    PUT /dallas/while?cond=num>=0               // while num >= 0
-      PUT /dallas/var/temp/a                    //   temp = a
-      PUT /dallas/var/a                         //   a =
-        GET /dallas/+/a/b                       //     a + b
-      PUT /dallas/var/b/temp                    //   b = temp
-      PUT /dallas/var/num                       //   num =
-        GET /dallas/-/num/1                     //     num - 1
-    GET /dallas/var/b                           // return b
+  defn/fibonacci?params=num         // define function 'fibonacci' with single input parameter 'num'
+    var?a=1&b=0&temp                // define a=1, b=0, temp
+    while?cond=num>=0               // while num >= 0
+      var/temp/a                    //   temp = a
+      var/a                         //   a =
+        +/a/b                       //     a + b
+      var/b/temp                    //   b = temp
+      var/num                       //   num =
+        -/num/1                     //     num - 1
+    var/b                           // return b
 
-  GET /dallas/callfn/fibonacci/8                // call 'fibonacci' function with argument 8
+  callfn/fibonacci/8                // call 'fibonacci' function with argument 8
 ```
 
 ## Ideas & concepts to think through
 
 ### General consensus based selection of modules
 
-Similarly to how NPM community decides which packages are good based on their popularity and rating, DMLaaS would choose to offer different libraries. Thanks to modularity, a call to e.g. `GET /dallas/callfn/quicksort` does not necessarily have to invoke a bunch of nested HTTP calls, but an actual implementation of quicksort, in arbitrary language, based on which execution node offers its availability. Developers could also choose specific implementation themselves, if needed, perhaps by calling `GET /dallas/callfn/npm-quicksort-13.3.1`
+Similarly to how NPM community decides which packages are good based on their popularity and rating, DMLaaS would choose to offer different libraries. Thanks to modularity, a call to e.g. `callfn/quicksort` does not necessarily have to invoke a bunch of nested HTTP calls, but an actual implementation of quicksort, in arbitrary language, based on which execution node offers its availability. Developers could also choose specific implementation themselves, if needed, perhaps by calling `callfn/npm-quicksort-13.3.1`
 
 ### REPL-like evaluation - select a block and execute only that.
 
@@ -82,12 +101,12 @@ Does nesting mean isolated scope? In case instructions get distributed into mult
 ### Async? Parallelization?
 
 ```
-POST /dallas/parallel?callback=xyz   // Call functions X, Y, and Z in parallel and create callback 'xyz' through which to collect outputs
-  GET /dallas/callfn/X
-  GET /dallas/callfn/Y
-  GET /dallas/callfn/Z
+Pparallel?callback=xyz   // Call functions X, Y, and Z in parallel and create callback 'xyz' through which to collect outputs
+  callfn/X
+  callfn/Y
+  callfn/Z
 
-GET /dallas/collect/xyz              // Collect returned values from parallel execution
+collect/xyz              // Collect returned values from parallel execution
 ```
 
 How to collect outputs?
@@ -95,10 +114,10 @@ How to collect outputs?
 ### Lists? Collections? Or any data structures, really?
 
 ```
-PUT /dallas/list/foo?items=6,5,4,3
+list/foo?items=6,5,4,3
 
-PUT /dallas/defn/sort?params=data   // Define function that sorts list
-  ... sorting algorithm ...         // ¯\_(ツ)_/¯
+defn/sort?params=data             // Define function that sorts list
+  ... sorting algorithm ...       // ¯\_(ツ)_/¯
 ```
 
 ### Automate interface generation from languages

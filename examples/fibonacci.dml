@@ -1,0 +1,19 @@
+program/my-fibonacci-example
+
+  defn/fibonacci?params=num
+    if
+      <=/num/1
+    then
+      var/num
+    else
+      var/a
+        -/num/1
+      var/b
+        -/num/2
+      var/fiba
+        callfn/fibonacci/a
+      var/fibb
+        callfn/fibonacci/b
+      +/fiba/fibb
+
+  callfn/fibonacci/8
