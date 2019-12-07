@@ -1,11 +1,10 @@
 program/my-fibonacci-example
 
-  defn/fibonacci?params=num
-    if
-      <=/num/1
-    then
-      var/num
-    else
+  defn/fibonacci/num
+    if/<=/num/1
+      var/result
+        var/num
+    if/>/num/1
       var/a
         -/num/1
       var/b
@@ -14,6 +13,8 @@ program/my-fibonacci-example
         callfn/fibonacci/a
       var/fibb
         callfn/fibonacci/b
-      +/fiba/fibb
+      var/result
+        +/fiba/fibb
+    var/result
 
   callfn/fibonacci/8

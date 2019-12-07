@@ -23,7 +23,7 @@ const main = async () => {
   }
 
   try {
-    const output = await interpret(code, true);
+    const output = await interpret(code, [], true);
     log(output);
   } catch (err) {
     log(`Interpretation failed with error ${err.message}`);

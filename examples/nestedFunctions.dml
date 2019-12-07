@@ -1,0 +1,15 @@
+program/nested-functions-example
+  defn/functiona/a
+    var/a
+
+  defn/functionb/b
+    var/b
+
+  defn/baz
+    var/x
+      callfn/functiona/3
+    var/y
+      callfn/functionb/5
+    +/x/y
+
+  callfn/baz

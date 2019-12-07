@@ -1,8 +1,9 @@
 program/my-function-example
 
-  defn/sum
-    var/a/3
-    var/b/5
+  defn/sum/a/b
     +/a/b
 
-  callfn/sum
+  var/c
+    callfn/sum/3/55
+
+  var/c
