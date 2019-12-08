@@ -35,11 +35,6 @@ Declare variable (option 1)
 
     var/{varName}/{value}
 
-Declare variable (option 2)
-
-    var?{varName}={value}
-    var?{varName1}={value1}&{varName2}={value2}
-
 Assign result of another instruction to a variable
 
     var/a      // a =
@@ -57,23 +52,29 @@ var/b/5
 +/a/b
 ```
 
-Fibonacci number:
+Recursive fibonacci function:
 
 ```
-program/my-fibonacci-example        // Create a program (or a namespace/scope, if you will) called my-fibonacci-example
+program/my-fibonacci-example       // Create a program (or a namespace/scope, if you will) called my-fibonacci-example
 
-  defn/fibonacci?params=num         // define function 'fibonacci' with single input parameter 'num'
-    var?a=1&b=0&temp                // define a=1, b=0, temp
-    while?cond=num>=0               // while num >= 0
-      var/temp/a                    //   temp = a
-      var/a                         //   a =
-        +/a/b                       //     a + b
-      var/b/temp                    //   b = temp
-      var/num                       //   num =
-        -/num/1                     //     num - 1
-    var/b                           // return b
+  defn/fibonacci/num               // define function 'fibonacci' with single input parameter 'num'
+    if/<=/num/1                    // if num <= 1
+      var/result                   //   result = num
+        var/num
+    if/>/num/1                     // if num > 1
+      var/a                        //   a = num - 1
+        -/num/1
+      var/b                        //   b = num -2
+        -/num/2
+      var/fiba                     //   fiba = fibonacci(a)
+        callfn/fibonacci/a
+      var/fibb                     //   fibb = fibonacci(b)
+        callfn/fibonacci/b
+      var/result                   //   result = fiba + fibb
+        +/fiba/fibb
+    var/result                     // return result
 
-  callfn/fibonacci/8                // call 'fibonacci' function with argument 8
+  callfn/fibonacci/8               // call 'fibonacci' function with argument 8
 ```
 
 ## Ideas & concepts to think through

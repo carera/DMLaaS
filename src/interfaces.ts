@@ -1,5 +1,9 @@
-export type Payload = {
-  pid: string; // program id
-  scopes: string[]; // array of scope IDs
-  data: any; // returned value from interpreter
+export type Scope = {
+  functions: { [key: string]: any };
+  vars: { [key: string]: any };
+};
+
+export type Variable = {
+  value: any;
+  type: "string" | "number" | "function" | "list";
 };

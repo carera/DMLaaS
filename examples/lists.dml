@@ -1,0 +1,9 @@
+program/lists-example
+
+  var/a/1
+  var/b/2
+
+  var/my-list
+    array/1/3/5/7/a/b
+
+  var/my-list
