@@ -10,7 +10,9 @@ export const interpret = async (
   scopes: string[] = [],
   outputOnlny: boolean = false
 ) => {
-  const code = input.filter(row => row.trim().length);
+  const code = input
+    .map(line => line.replace(/\/\/.*/, "")) // remove comments
+    .filter(row => row.trim().length); // filter empty lines
   let i = 0;
   let finalResponse = null;
   while (code[i]) {

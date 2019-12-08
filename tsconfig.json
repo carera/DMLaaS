@@ -11,7 +11,7 @@
     "strictNullChecks": true,
     "target": "es2017"
   },
-  "include": ["src", "typings"],
+  "include": ["src", "typings", "e2e"],
   "exclude": ["node_modules", "tmp"],
   "formatCodeOptions": {
     "convertTabsToSpaces": true,

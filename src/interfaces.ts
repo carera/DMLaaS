@@ -5,5 +5,9 @@ export type Scope = {
 
 export type Variable = {
   value: any;
-  type: "string" | "number" | "function" | "list";
+  type: "string" | "number" | "function" | "array";
+};
+export type InstructionData = {
+  code: string[];
+  scopes: string[];
 };

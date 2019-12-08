@@ -3,6 +3,10 @@
 DMLaaS - Distributed Modular Language as a Service is a programming language implemented as an API. This means that individual instructions
 are executed via API calls to the interpreter. These instructions can be grouped into instruction blocks, forming programs, functions, and other structures typical language would have. The fact that blocks of instructions (at any granularity, down to individual instructions) can be (and are) executed on independent execution nodes (servers) allows virtually infinite scaling and parallelization.
 
+**Distributed** - The code runs in a network. An arbitrarily large part of code can be executed on an independent execution node.
+
+**Modular** - Building blocks of your program don't have to be written in DML, but a DML instruction can invoke a module, virtually from any language out there.
+
 > ## Disclaimer
 >
 > This a conceptual, experimental case study, mostly for shits and giggles. And trolls. Maybe, one day, we will find energy to implement this.
@@ -102,12 +106,10 @@ Does nesting mean isolated scope? In case instructions get distributed into mult
 ### Async? Parallelization?
 
 ```
-Pparallel?callback=xyz   // Call functions X, Y, and Z in parallel and create callback 'xyz' through which to collect outputs
+parallel   // Call functions X, Y, and Z in parallel
   callfn/X
   callfn/Y
   callfn/Z
-
-collect/xyz              // Collect returned values from parallel execution
 ```
 
 How to collect outputs?
@@ -115,10 +117,20 @@ How to collect outputs?
 ### Lists? Collections? Or any data structures, really?
 
 ```
-list/foo?items=6,5,4,3
+list/foo/6/5/4/3
 
 defn/sort?params=data             // Define function that sorts list
   ... sorting algorithm ...       // ¯\_(ツ)_/¯
+```
+
+### Types?
+
+There are many options on how to approach types:
+
+```
+var/number/a/3
+number/a/3
+var/a:number/3
 ```
 
 ### Automate interface generation from languages

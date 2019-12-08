@@ -1,0 +1,24 @@
+program/parallel-example
+
+  defn/fibonacci/num
+    if/<=/num/1
+      var/result
+        var/num
+    if/>/num/1
+      var/a
+        -/num/1
+      var/b
+        -/num/2
+      var/fiba
+        callfn/fibonacci/a
+      var/fibb
+        callfn/fibonacci/b
+      var/result
+        +/fiba/fibb
+    var/result
+
+  parallel
+    callfn/fibonacci/5    // calculate fibonacci(5)
+    */2/3                 // 2 * 3
+    **/2/12               // 2^12
+

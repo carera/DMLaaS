@@ -1,6 +1,7 @@
 import { interpret } from "./interpreter";
 import Router = require("koa-router");
 import memory from "./memory";
+import { InstructionData } from "./interfaces";
 const router = new Router();
 
 // Program initialization
@@ -122,10 +123,7 @@ router.post("/if/:cond/:left/:right", async (ctx, next) => {
   if (!evaluateCondition) {
     return next();
   }
-  const {
-    code,
-    scopes
-  }: { code: string[]; scopes: string[] } = ctx.request.body;
+  const { code, scopes }: InstructionData = ctx.request.body;
   const leftVal = memory.findVariableValue(left, scopes);
   const rightVal = memory.findVariableValue(right, scopes);
   // const elseCode = code.findIndex(item => item === 'else')
@@ -137,13 +135,30 @@ router.post("/if/:cond/:left/:right", async (ctx, next) => {
   }
 });
 
+// Parallelism
+
+router.post("/parallel/:callback*", async (ctx, next) => {
+  const { code, scopes }: InstructionData = ctx.request.body;
+  const promises = code.map(line => interpret([line], scopes));
+  const result = await Promise.all(promises);
+  const callbackName = ctx.params.callback;
+  // if (callbackName) {
+  //   const callback = memory.findFunction(callbackName, scopes);
+  //   TODO invoke callback
+  // } else {
+  //   ctx.body = result;
+  // }
+  ctx.body = result;
+});
+
 // Basic math operations
 
 const mathOperations: { [key: string]: (...args: any) => any } = {
   "+": (a: number, b: number) => a + b,
   "-": (a: number, b: number) => a - b,
   "*": (a: number, b: number) => a * b,
-  "/": (a: number, b: number) => a / b
+  "/": (a: number, b: number) => a / b,
+  "**": (a: number, b: number) => a ** b
 };
 
 router.post("/:op/:a/:b", (ctx, next) => {
