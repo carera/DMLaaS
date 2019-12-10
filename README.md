@@ -18,10 +18,10 @@ are executed via API calls to the interpreter. These instructions can be grouped
 - Node 13, or nvm
 
 ```
-nvm use
-npm i
-npm run start:server              // Starts DML server
-bin/dml -f <your program>         // Runs your program
+nvm use                           // Switch to required Node version
+npm i                             // Install dependencies
+npm run start:server              // Start DML server
+bin/dml -f <your program>         // Run your program
 ```
 
 Example:
@@ -34,6 +34,12 @@ bin/dml -f examples/function.dml
 
 Syntax is defined by HTTP calls - methods and paths, supported by indentation to define nesting. The API paths and methods
 haven't been decided yet and are subject to change.
+
+| Type                 | Syntax                                                      | Example   |
+| -------------------- | ----------------------------------------------------------- | --------- |
+| Variable declaration | `var/{varName}/{value}`                                     | `var/a/3` |
+| Expression           | `{operator}/{arg1}/{arg2}/...`                              | `+/3/5`   |
+| Condition            | <code>if<br>&nbsp;&nbsp;{cond}<br>&nbsp;&nbsp;{cond}</code> |
 
 Declare variable (option 1)
 
@@ -49,6 +55,12 @@ Assign result of another instruction to a variable
 ## Examples
 
 Add two numbers:
+
+```
++/3/5
+```
+
+Using variables:
 
 ```
 var/a/3
@@ -68,7 +80,7 @@ program/my-fibonacci-example       // Create a program (or a namespace/scope, if
     if/>/num/1                     // if num > 1
       var/a                        //   a = num - 1
         -/num/1
-      var/b                        //   b = num -2
+      var/b                        //   b = num - 2
         -/num/2
       var/fiba                     //   fiba = fibonacci(a)
         callfn/fibonacci/a
@@ -80,6 +92,8 @@ program/my-fibonacci-example       // Create a program (or a namespace/scope, if
 
   callfn/fibonacci/8               // call 'fibonacci' function with argument 8
 ```
+
+Find other examples in the `examples` folder
 
 ## Ideas & concepts to think through
 
