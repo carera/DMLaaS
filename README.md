@@ -18,10 +18,10 @@ are executed via API calls to the interpreter. These instructions can be grouped
 - Node 13, or nvm
 
 ```
-nvm use
-npm i
-npm run start:server              // Starts DML server
-bin/dml -f <your program>         // Runs your program
+nvm use                           // Switch to required Node version
+npm i                             // Install dependencies
+npm run start:server              // Start DML server
+bin/dml -f <your program>         // Run your program
 ```
 
 Example:
@@ -35,25 +35,32 @@ bin/dml -f examples/function.dml
 Syntax is defined by HTTP calls - methods and paths, supported by indentation to define nesting. The API paths and methods
 haven't been decided yet and are subject to change.
 
-Declare variable (option 1)
-
-    var/{varName}/{value}
-
-Assign result of another instruction to a variable
-
-    var/a      // a =
-      +/3/5    //   3 + 5
-
-... TBD ...
+| Type                 | Syntax                            | Example               |
+| -------------------- | --------------------------------- | --------------------- |
+| Program declaration  | `program/{name}`                  | `program/hello-world` |
+| Variable declaration | `var/{varName}/{value}`           | `var/a/3`             |
+| Expression           | `{operator}/{arg1}/{arg2}/...`    | `+/3/5`               |
+| Condition            | `if/{condition}/{arg1}/{arg2}`    | `if/</3/5`            |
+| Function declaration | `defn/{name}/{arg1}/{arg2}/...`   | `defn/sum/a/b`        |
+| Function invocation  | `callfn/{name}/{arg1}/{arg2}/...` | `callfn/sum/a/b`      |
+| Parallel invocation  | `parallel`                        | `parrallel`           |
+| Array                | `array/{val1}/{val2}/...`         | `array/2/4/6/8`       |
 
 ## Examples
 
 Add two numbers:
 
 ```
-var/a/3
-var/b/5
-+/a/b
++/3/5
+```
+
+Using variables:
+
+```
+var/a/3    // assign a = 3
+var/b/5    // assign b = 5
+var/c      // assign c = a + b
+  +/a/b
 ```
 
 Recursive fibonacci function:
@@ -68,7 +75,7 @@ program/my-fibonacci-example       // Create a program (or a namespace/scope, if
     if/>/num/1                     // if num > 1
       var/a                        //   a = num - 1
         -/num/1
-      var/b                        //   b = num -2
+      var/b                        //   b = num - 2
         -/num/2
       var/fiba                     //   fiba = fibonacci(a)
         callfn/fibonacci/a
@@ -81,7 +88,24 @@ program/my-fibonacci-example       // Create a program (or a namespace/scope, if
   callfn/fibonacci/8               // call 'fibonacci' function with argument 8
 ```
 
-## Ideas & concepts to think through
+Run multiple instructions in parallel
+
+```
+parallel
+  +/4/5
+  -/10/2
+  **/2/12
+
+// returns list of results: [ 9, 8, 4096 ]
+```
+
+Find other examples in the `examples` folder
+
+## Memory
+
+One might ask, where are declard variables, functions, and scopes stored? Right now, all of this is currently passed in the request body of the individual invocations
+
+# Ideas & concepts to think through
 
 ### General consensus based selection of modules
 

@@ -18,7 +18,6 @@ program/parallel-example
     var/result
 
   parallel
-    callfn/fibonacci/5    // calculate fibonacci(5)
-    */2/3                 // 2 * 3
-    **/2/12               // 2^12
-
+    callfn/fibonacci/4
+    callfn/fibonacci/5
+    callfn/fibonacci/6

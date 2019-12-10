@@ -12,21 +12,23 @@ program
 
 app.use(
   bodyParser({
-    enableTypes: ["json"]
+    enableTypes: ["json"],
   })
 );
 
 app.use((ctx, next) => {
   log(`
+=========================================
 URL:     ${ctx.req.url}
-CODE:    ${JSON.stringify(ctx.request.body.code)}
-SCOPE:   ${JSON.stringify(ctx.request.body.scopes)}
-MEMORY:  ${JSON.stringify(memory)}
+CODE:    ${JSON.stringify(ctx.request.body.code, null, 2)}
+SCOPE:   ${JSON.stringify(ctx.request.body.scopes, null, 2)}
+MEMORY:  ${JSON.stringify(memory, null, 2)}
+=========================================
       `);
   return next();
 });
 app.use(router.routes());
-app.use(ctx => (ctx.body = `Route ${ctx.req.url} not found`));
+app.use((ctx) => (ctx.body = `Route ${ctx.req.url} not found`));
 
 const { port } = program;
 log(`listening on port ${port}`);
